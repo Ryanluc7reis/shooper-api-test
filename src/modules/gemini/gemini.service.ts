@@ -45,11 +45,13 @@ export const uploadImage = async () => {
     let stringRead;
 
     if (matchNumber && matchString) {
-      numberRead = matchNumber[0];
+      numberRead = parseInt(matchNumber[0], 10);
       stringRead = matchString[0];
     } else {
       console.log("No characters found.");
+      numberRead = 0;
     }
+
     return { uri, guid, numberRead, stringRead, date, stringBase64 };
   } catch (err) {
     throw err;

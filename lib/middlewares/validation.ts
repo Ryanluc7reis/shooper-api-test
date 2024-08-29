@@ -7,8 +7,9 @@ export default function validation(schema: ObjectSchema) {
 
     if (error) {
       return res.status(400).json({
-        error: "Erro de validação",
-        details: error.details.map((detail) => detail.message),
+        error_code: "INVALID_DATA",
+        error_description:
+          "Os dados fornecidos no corpo da requisição são inválidos",
       });
     }
     next();
