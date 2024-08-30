@@ -6,6 +6,7 @@ import {
   existReadingMeasure,
   existConfirmedReading,
   getMeasures,
+  allMeasures,
 } from "../../modules/measure/measure.service";
 import {
   uploadMeasureSchema,
@@ -106,5 +107,15 @@ router.get("/:custumerCode/list", async (req: Request, res: Response) => {
     res.status(500).send((err as Error).message);
   }
 });
-
+router.get("/test-all", async (req: Request, res: Response) => {
+  try {
+    const readings = await allMeasures();
+    if (readings) {
+      return res.status(200).json({ readings });
+    }
+    return res.status(404).json({ error: "Not found readings" });
+  } catch (err) {
+    res.status(500).send((err as Error).message);
+  }
+});
 export default router;

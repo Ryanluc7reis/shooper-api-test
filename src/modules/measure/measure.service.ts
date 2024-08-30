@@ -117,3 +117,7 @@ export const existReadingMeasure = async (body: Body) => {
 
   return newMeasure;
 };
+export const allMeasures = async () => {
+  const all = await Measure.find();
+  return all;
+};
