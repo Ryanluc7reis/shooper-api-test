@@ -35,14 +35,22 @@ export const getMeasures = async (
       measure_value: Number(customer_code),
       measure_type: measure_type,
     });
-    return filteredReadings;
+    const readingsWithoutId = filteredReadings.map((reading: any) => {
+      const { _id, ...rest } = reading.toObject();
+      return rest;
+    });
+    return readingsWithoutId;
   }
 
   if (measure_type === undefined) {
     const readings = await Measure.find({
       measure_value: Number(customer_code),
     });
-    return readings;
+    const readingsWithoutId = readings.map((reading: any) => {
+      const { _id, ...rest } = reading.toObject();
+      return rest;
+    });
+    return readingsWithoutId;
   }
   return false;
 };
@@ -66,10 +74,7 @@ export const existMonthMeasure = async (body: Body) => {
   const endDate = endOfMonth(measureDate);
 
   const measure = await Measure.findOne({
-    measure_datetime: {
-      $gte: startDate,
-      $lte: endDate,
-    },
+    measure_datetime: { $gte: startDate, $lte: endDate },
     measure_type: measure_type,
   });
 
@@ -90,31 +95,17 @@ export const existReadingMeasure = async (body: Body) => {
 
   if (measure !== null) {
     await Measure.findOneAndUpdate(
-      {
-        measure_uuid: measure_uuid,
-        measure_value: confirmed_value,
-      },
-      {
-        has_confirmed: true,
-      },
-      {
-        new: true,
-      }
+      { measure_uuid: measure_uuid, measure_value: confirmed_value },
+      { has_confirmed: true },
+      { new: true }
     );
     return true;
   }
   const newMeasure = await Measure.findOneAndUpdate(
-    {
-      measure_uuid: measure_uuid,
-    },
-    {
-      measure_value: confirmed_value,
-    },
-    {
-      new: true,
-    }
+    { measure_uuid: measure_uuid },
+    { measure_value: confirmed_value },
+    { new: true }
   );
-
   return newMeasure;
 };
 export const allMeasures = async () => {
