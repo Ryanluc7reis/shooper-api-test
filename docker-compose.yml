@@ -1,0 +1,13 @@
+services:
+  api-shooper:
+    build: .
+    container_name: shooper_api
+    restart: always
+    ports:
+      - "3333:3333"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PORT=${PORT}
+    volumes:
+      - .:/index
