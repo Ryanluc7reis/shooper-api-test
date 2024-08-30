@@ -16,12 +16,40 @@ A aplicação consiste em uma REST API integrada com API Gemini para realizar le
 
 ## Features
 
-POST /upload - Responsável por receber uma imagem em base 64, consultar o Gemini e retornar a
+POST /api/upload - Responsável por receber uma imagem em base 64, consultar o Gemini e retornar a
 medida lida pela API.
 
-PATCH /confirm - Responsável por confirmar ou corrigir o valor lido pelo LLM.
+**Exemplo de request**
+```bash
+{
+ "image": "MWVhYWEyMjlhNmE0ZTAxNzdlMDlkOWI0ZjdlMDJlNmNkN2MwNTM0ZjExZmI4MzE5YWZhZTFlMmFiYTdjN2YxZA==",
+ "customer_code": "5455",
+ "measure_datetime": "2024-10-30T02:40:30.750+00:00",
+ "measure_type": "water"
+}
+```
+PATCH /api/confirm - Responsável por confirmar ou corrigir o valor lido pelo LLM.
 
-GET /**customer-code**/list - Responsável por listar as medidas realizadas por um determinado cliente.
+**Exemplo de request**
+```bash
+{
+ "measure_uuid": "d4w3lgzvf6fk",
+ "confirmed_value": 2288882
+}
+```
+
+GET /api/**customer-code**/list - Responsável por listar as medidas realizadas por um determinado cliente.
+
+**Exemplo de request**
+```bash
+{
+ "measure_value": 62237
+}
+```
+
+GET /api/test-all - Resposável por listar todas medidas cadastradas no banco.
+
+ - Criado para um melhor aproveitamento de testes das outras rotas.
 
 ## Getting Started
 
@@ -50,6 +78,9 @@ docker-compose up or docker-compose up -d
 
 ---
 
-**Autor:** [Ryan Lucas Ferreira Reis]  
+**Autor:** [Ryan Lucas Ferreira Reis] 
+
+**Linkedin:** [https://www.linkedin.com/in/ryanluc7reis/]
+
 **Email:** [ryanluc.dev18@gmail.com]  
-**Data:** [30/08/2024]
+
