@@ -10,6 +10,7 @@ interface Body {
   image_url: string;
   customer_code: string;
 }
+
 export const createMeasure = async (
   uri: string,
   uuid: string,
@@ -26,6 +27,7 @@ export const createMeasure = async (
   });
   return newImage;
 };
+
 export const getMeasures = async (
   customer_code: string,
   measure_type?: string
@@ -36,7 +38,7 @@ export const getMeasures = async (
       measure_type: measure_type,
     });
     const readingsWithoutId = filteredReadings.map((reading: any) => {
-      const { _id, ...rest } = reading.toObject();
+      const { _id, measure_value, __v, ...rest } = reading.toObject();
       return rest;
     });
     return readingsWithoutId;
@@ -47,13 +49,15 @@ export const getMeasures = async (
       measure_value: Number(customer_code),
     });
     const readingsWithoutId = readings.map((reading: any) => {
-      const { _id, ...rest } = reading.toObject();
+      const { _id, measure_value, __v, ...rest } = reading.toObject();
       return rest;
     });
     return readingsWithoutId;
   }
+
   return false;
 };
+
 export const existConfirmedReading = async (body: Body) => {
   const { measure_uuid, confirmed_value } = body;
   const confirmedMeasure = await Measure.findOne({
@@ -106,8 +110,10 @@ export const existReadingMeasure = async (body: Body) => {
     { measure_value: confirmed_value },
     { new: true }
   );
+
   return newMeasure;
 };
+
 export const allMeasures = async () => {
   const all = await Measure.find();
   return all;
