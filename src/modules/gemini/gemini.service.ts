@@ -16,10 +16,13 @@ const model = genAI.getGenerativeModel({
 
 export const uploadImage = async () => {
   try {
-    const uploadResponse = await fileManager.uploadFile("public/medidor.webp", {
-      mimeType: "image/webp",
-      displayName: "Medidor",
-    });
+    const uploadResponse = await fileManager.uploadFile(
+      "public/medidor-gas.webp",
+      {
+        mimeType: "image/webp",
+        displayName: "Medidor",
+      }
+    );
 
     const getResponse = await fileManager.getFile(uploadResponse.file.name);
     const { uri, name, createTime, sha256Hash } = getResponse;

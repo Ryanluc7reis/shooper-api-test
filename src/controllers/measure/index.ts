@@ -5,6 +5,7 @@ import {
   createMeasure,
   existReadingMeasure,
   existConfirmedReading,
+  getMeasures,
 } from "../../modules/measure/measure.service";
 import {
   uploadMeasureSchema,
@@ -26,15 +27,16 @@ router.post(
           error_description: "Leitura do mês já realizada",
         });
       }
-      //const { image } = req.body;
+
       const geminiResponse = await uploadImage();
       if (geminiResponse) {
         await createMeasure(
-          req.body,
           geminiResponse.uri,
           geminiResponse.guid,
-          geminiResponse.numberRead
+          geminiResponse.numberRead,
+          geminiResponse.stringRead
         );
+
         return res.status(200).json({
           image_url: geminiResponse.uri,
           measure_value: geminiResponse.numberRead,
@@ -72,9 +74,37 @@ router.patch(
         error_description: "Leitura do não encontrada",
       });
     } catch (err) {
-      res.status(400).send((err as Error).message);
+      res.status(500).send((err as Error).message);
     }
   }
 );
+
+router.get("/:custumerCode/list", async (req: Request, res: Response) => {
+  try {
+    const { custumerCode } = req.params;
+    const { measure_type } = req.query;
+
+    const readings = await getMeasures(custumerCode, measure_type as string);
+    if (!readings) {
+      return res.status(400).json({
+        error_code: "INVALID_TYPE",
+        error_description: "Tipo de medição não permitida",
+      });
+    }
+
+    if (readings && readings.length > 0) {
+      return res.status(200).json({
+        customer_code: custumerCode,
+        measures: readings,
+      });
+    }
+    return res.status(404).json({
+      error_code: "MEASURES_NOT_FOUND",
+      error_description: "Nenhuma leitura encontrada",
+    });
+  } catch (err) {
+    res.status(500).send((err as Error).message);
+  }
+});
 
 export default router;

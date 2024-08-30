@@ -2,7 +2,7 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 
 interface Measure extends Document {
   measure_uuid: string;
-  measure_value: number;
+  measure_value: number | string;
   measure_datetime: Date;
   measure_type: string;
   has_confirmed: boolean;
@@ -11,7 +11,7 @@ interface Measure extends Document {
 
 const MeasureSchema: Schema<Measure> = new mongoose.Schema({
   measure_uuid: { type: String, required: true },
-  measure_value: { type: Number, required: true },
+  measure_value: { type: Schema.Types.Mixed, required: true },
   measure_datetime: { type: Date, required: true },
   measure_type: { type: String, required: true },
   has_confirmed: { type: Boolean, required: true },
