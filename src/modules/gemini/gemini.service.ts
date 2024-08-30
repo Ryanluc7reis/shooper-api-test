@@ -37,26 +37,29 @@ export const uploadImage = async () => {
           fileUri: uploadResponse.file.uri,
         },
       },
-      { text: "Describe if measure is about water or gas and what the reads" },
+      {
+        text: "Please describe if this measure is related to water or gas, and provide the readings.",
+      },
     ]);
 
-    const resultText = result.response.text();
+    const resultText = await result.response.text();
     const matchNumber = resultText.match(/\b\d{5,}\b/);
-    const matchString = resultText.match("gas" || "water");
+    const matchString = resultText.match(/gas|water/);
 
-    let numberRead;
-    let stringRead;
+    let numberRead = 0;
+    let stringRead = "";
 
-    if (matchNumber && matchString) {
+    if (matchNumber) {
       numberRead = parseInt(matchNumber[0], 10);
+    }
+
+    if (matchString) {
       stringRead = matchString[0];
-    } else {
-      console.log("No characters found.");
-      numberRead = 0;
     }
 
     return { uri, guid, numberRead, stringRead, date, stringBase64 };
   } catch (err) {
+    console.error("Error uploading or processing the image:", err);
     throw err;
   }
 };
