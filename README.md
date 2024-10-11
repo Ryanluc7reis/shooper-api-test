@@ -1,4 +1,4 @@
-# shooper-api-test
+# shooper-api
 
 A aplicação consiste em uma REST API integrada com API Gemini para realizar leituras do conteúdo de imagens.
 
